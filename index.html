@@ -431,18 +431,174 @@
         }
 
         .navbar {
-            position: sticky;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
+            width: 100%;
             z-index: 1000;
-            padding: 1rem 0;
-            background: rgba(10, 6, 20, 0.94);
+            padding: 0.75rem 0;
+            background: rgba(10, 6, 20, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-glass);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             transition: all var(--transition-smooth);
+        }
+
+        .nav-mini-player {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.35rem 0.85rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-fast);
+        }
+
+        .nav-mini-player:hover {
+            background: rgba(168, 85, 247, 0.12);
+            border-color: rgba(168, 85, 247, 0.45);
+        }
+
+        .nav-player-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(168, 85, 247, 0.5);
+            transition: transform var(--transition-bounce);
+        }
+
+        .nav-player-btn:hover {
+            transform: scale(1.12);
+        }
+
+        .nav-player-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+            text-align: left;
+        }
+
+        .nav-player-tag {
+            font-size: 0.65rem;
+            color: var(--primary-glow);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .nav-player-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .nav-mini-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2.5px;
+            height: 14px;
+        }
+
+        .nav-mini-bars span {
+            width: 3px;
+            height: 4px;
+            background: var(--primary-glow);
+            border-radius: 2px;
+            transition: height 0.2s ease;
+        }
+
+        .nav-mini-bars.playing span:nth-child(1) {
+            animation: miniWave 0.8s ease-in-out infinite alternate;
+        }
+        .nav-mini-bars.playing span:nth-child(2) {
+            animation: miniWave 0.5s ease-in-out infinite alternate 0.15s;
+        }
+        .nav-mini-bars.playing span:nth-child(3) {
+            animation: miniWave 0.9s ease-in-out infinite alternate 0.3s;
+        }
+        .nav-mini-bars.playing span:nth-child(4) {
+            animation: miniWave 0.6s ease-in-out infinite alternate 0.1s;
+        }
+
+        @keyframes miniWave {
+            0% { height: 3px; }
+            100% { height: 14px; }
+        }
+
+        .hobby-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .hobby-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 1.25rem;
+            padding: 2rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1.25rem;
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hobby-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(168, 85, 247, 0.45);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+        }
+
+        .hobby-icon {
+            font-size: 2.2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hobby-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .hobby-pill {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-dim);
+            border: 1px solid var(--border-glass);
+        }
+
+        @media (max-width: 640px) {
+            .nav-player-info {
+                display: none;
+            }
+            .nav-mini-player {
+                padding: 0.3rem 0.5rem;
+            }
         }
 
         .nav-container {
@@ -1537,11 +1693,25 @@
                     <li><a href="#experience" class="nav-link">Experience</a></li>
                     <li><a href="#skills" class="nav-link">Skills</a></li>
                     <li><a href="#projects" class="nav-link">Projects</a></li>
-                    <li><a href="#media" class="nav-link">Audio & Music</a></li>
+                    <li><a href="#hobbies" class="nav-link">Hobbies</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
 
                 <div class="nav-actions">
+                    <div class="nav-mini-player" id="nav-mini-player" title="Click to play / pause what I'm currently listening to">
+                        <button type="button" class="nav-player-btn" id="nav-player-btn" aria-label="Play or pause audio">
+                            <span id="nav-play-icon">▶</span>
+                        </button>
+                        <div class="nav-player-info">
+                            <span class="nav-player-tag">Listening</span>
+                            <span class="nav-player-title">Mario Groove 🎵</span>
+                        </div>
+                        <div class="nav-mini-bars" id="nav-mini-bars" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <audio id="nav-audio" src="mario_3.mp3" preload="metadata"></audio>
+                    </div>
+
                     <a href="#contact" class="btn btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.88rem;"
                         id="nav-contact-btn">
                         Let's Talk
@@ -2118,81 +2288,80 @@
             </div>
         </section>
 
-        <section id="media">
+        <section id="hobbies">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-tag">Audio &amp; Vibes</span>
-                    <h2 class="section-title">Currently Listening &amp; Ringtone</h2>
-                    <p class="section-desc">Experience my music taste and interactive soundwave animation.</p>
+                    <span class="section-tag">Beyond The Code</span>
+                    <h2 class="section-title">Hobbies &amp; Interests</h2>
+                    <p class="section-desc">What fuels my energy, creativity, and balanced perspective away from the screen.</p>
                 </div>
 
-                <div class="media-showcase-grid">
-                    <div class="glass-card media-card">
-                        <div>
-                            <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.65rem;">
-                                <span>🎧</span> Spotify Favorite Track
-                            </h3>
-                            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
-                                Music that keeps the coding flow running. Directly embedded with Spotify's responsive
-                                web frame.
-                            </p>
+                <div class="hobby-grid">
+                    <div class="hobby-card">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="hobby-icon">🏀</div>
+                            <div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.35rem; color: #ffffff;">Basketball</h3>
+                                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                                    Playing basketball occasionally — pick-up games, shooting hoops, court vision, and staying athletic. It's my favorite way to keep active, practice fast-paced teamwork, and reset after deep technical sprints.
+                                </p>
+                            </div>
                         </div>
-
-                        <div
-                            style="border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-                            <iframe style="border-radius: 12px; display: block;"
-                                src="https://open.spotify.com/embed/track/4B9ea9mEIpJFGu9EM9OT6r?utm_source=generator&theme=0"
-                                width="100%" height="152" frameBorder="0" allowfullscreen=""
-                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                loading="lazy" title="Spotify Track Embed">
-                            </iframe>
-                        </div>
-
-                        <div
-                            style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;">
-                            Powered by Spotify Web API &bull; Curated Playlist
+                        <div class="hobby-tags">
+                            <span class="hobby-pill">Pick-Up Games</span>
+                            <span class="hobby-pill">Court Agility</span>
+                            <span class="hobby-pill">Active Lifestyle</span>
                         </div>
                     </div>
 
-                    <div class="glass-card media-card">
-                        <div>
-                            <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.65rem;">
-                                <span>🔔</span> Phone Verification Ringtone
-                            </h3>
-                            <p style="color: var(--text-muted); font-size: 0.95rem;">
-                                If you ever need to find or verify my phone by ringing it, this classic Mario groove is
-                                what plays!
-                            </p>
+                    <div class="hobby-card">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="hobby-icon">🎬</div>
+                            <div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.35rem; color: #ffffff;">Movies &amp; TV Shows</h3>
+                                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                                    Huge enthusiasm for compelling visual storytelling, clever plot twists, and high-concept cinema. From mind-bending sci-fi and intense psychological thrillers to binge-worthy episodic television drama.
+                                </p>
+                            </div>
                         </div>
-
-                        <div class="soundwave-visualizer" id="soundwave">
-                            <span class="wave-bar"></span>
-                            <span class="wave-bar"></span>
-                            <span class="wave-bar"></span>
-                            <span class="wave-bar"></span>
-                            <span class="wave-bar"></span>
-                            <span class="wave-bar"></span>
-                            <span class="wave-bar"></span>
-                            <span class="wave-bar"></span>
+                        <div class="hobby-tags">
+                            <span class="hobby-pill">Sci-Fi Cinema</span>
+                            <span class="hobby-pill">Thrillers</span>
+                            <span class="hobby-pill">Episodic Series</span>
                         </div>
+                    </div>
 
-                        <div
-                            style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-glass); border-radius: 1rem; padding: 1.5rem; text-align: center; margin-top: 1rem;">
-                            <h4 style="font-size: 1.15rem; color: #ffffff; margin-bottom: 0.35rem;">Super Mario Ringtone
-                                🎵</h4>
-                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Listen
-                                directly using native HTML5 audio controls</p>
-                            <audio controls preload="metadata"
-                                style="width: 100%; max-width: 380px; border-radius: 30px; outline: none;">
-                                <source src="mario_3.mp3" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
+                    <div class="hobby-card">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="hobby-icon">📚</div>
+                            <div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.35rem; color: #ffffff;">Reading</h3>
+                                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                                    Reading across technology developments, self-growth, science, and thought-provoking literature. Constantly discovering fresh perspectives, mental models, and ideas that inform my engineering mindset.
+                                </p>
+                            </div>
                         </div>
+                        <div class="hobby-tags">
+                            <span class="hobby-pill">Tech &amp; Science</span>
+                            <span class="hobby-pill">Personal Growth</span>
+                            <span class="hobby-pill">Mental Models</span>
+                        </div>
+                    </div>
 
-                        <div
-                            style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;">
-                            Phone: <a href="tel:9346752882" style="color: var(--primary-glow); font-weight: 600;">+91
-                                9346752882</a>
+                    <div class="hobby-card">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="hobby-icon">🎧</div>
+                            <div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.35rem; color: #ffffff;">Music &amp; Focus Sounds</h3>
+                                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                                    Soundtracks and grooves that keep my workflow sharp and energized throughout the day. Check out what I'm currently listening to via the playable mini player pinned right in the fixed top navigation bar!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="hobby-tags">
+                            <span class="hobby-pill">Focus Grooves</span>
+                            <span class="hobby-pill">Soundtracks</span>
+                            <span class="hobby-pill">Playable in Navbar ⬆</span>
                         </div>
                     </div>
                 </div>
@@ -2291,6 +2460,7 @@
                 <a href="#experience" class="nav-link">Experience</a>
                 <a href="#skills" class="nav-link">Skills</a>
                 <a href="#projects" class="nav-link">Projects</a>
+                <a href="#hobbies" class="nav-link">Hobbies</a>
                 <a href="#contact" class="nav-link">Contact</a>
             </nav>
 
@@ -2314,6 +2484,37 @@
     <a href="#hero" class="back-to-top" id="back-to-top" aria-label="Back to Top" title="Back to Top">
         <img src="circle-arrow-up-solid-full.svg" alt="Scroll to Top">
     </a>
+    <script>
+        (function() {
+            const navAudio = document.getElementById('nav-audio');
+            const navPlayerBtn = document.getElementById('nav-player-btn');
+            const navPlayIcon = document.getElementById('nav-play-icon');
+            const navMiniBars = document.getElementById('nav-mini-bars');
+
+            if (navPlayerBtn && navAudio) {
+                navPlayerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (navAudio.paused) {
+                        navAudio.play().then(function() {
+                            navPlayIcon.textContent = '❚❚';
+                            if (navMiniBars) navMiniBars.classList.add('playing');
+                        }).catch(function(err) {
+                            console.log('Playback error:', err);
+                        });
+                    } else {
+                        navAudio.pause();
+                        navPlayIcon.textContent = '▶';
+                        if (navMiniBars) navMiniBars.classList.remove('playing');
+                    }
+                });
+
+                navAudio.addEventListener('ended', function() {
+                    navPlayIcon.textContent = '▶';
+                    if (navMiniBars) navMiniBars.classList.remove('playing');
+                });
+            }
+        })();
+    </script>
 </body>
 
 </html>
