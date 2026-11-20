@@ -434,41 +434,36 @@
             transition: all var(--transition-smooth);
         }
 
+        .nav-spotify-wrapper {
+            position: relative;
+        }
+
         .nav-mini-player {
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            padding: 0.35rem 0.85rem;
+            padding: 0.38rem 0.85rem;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-glass);
             border-radius: 999px;
             backdrop-filter: blur(10px);
             transition: all var(--transition-fast);
+            cursor: pointer;
+            color: inherit;
         }
 
         .nav-mini-player:hover {
-            background: rgba(168, 85, 247, 0.12);
-            border-color: rgba(168, 85, 247, 0.45);
+            background: rgba(29, 185, 84, 0.12);
+            border-color: rgba(29, 185, 84, 0.55);
+            box-shadow: 0 4px 16px rgba(29, 185, 84, 0.3);
         }
 
-        .nav-player-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #ffffff;
-            display: inline-flex;
+        .nav-spotify-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(168, 85, 247, 0.5);
-            transition: transform var(--transition-bounce);
-        }
-
-        .nav-player-btn:hover {
-            transform: scale(1.12);
         }
 
         .nav-player-info {
@@ -480,7 +475,7 @@
 
         .nav-player-tag {
             font-size: 0.65rem;
-            color: var(--primary-glow);
+            color: #1db954;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 700;
@@ -493,37 +488,52 @@
             white-space: nowrap;
         }
 
-        .nav-mini-bars {
+        .nav-spotify-popover {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 330px;
+            background: rgba(15, 9, 28, 0.97);
+            border: 1px solid rgba(29, 185, 84, 0.45);
+            border-radius: 16px;
+            padding: 0.85rem;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            display: none;
+            z-index: 1001;
+            animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-spotify-popover.active {
+            display: block;
+        }
+
+        .nav-spotify-popover-header {
             display: flex;
-            align-items: flex-end;
-            gap: 2.5px;
-            height: 14px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+            padding: 0 0.25rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #ffffff;
         }
 
-        .nav-mini-bars span {
-            width: 3px;
-            height: 4px;
-            background: var(--primary-glow);
-            border-radius: 2px;
-            transition: height 0.2s ease;
+        .nav-popover-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
         }
 
-        .nav-mini-bars.playing span:nth-child(1) {
-            animation: miniWave 0.8s ease-in-out infinite alternate;
-        }
-        .nav-mini-bars.playing span:nth-child(2) {
-            animation: miniWave 0.5s ease-in-out infinite alternate 0.15s;
-        }
-        .nav-mini-bars.playing span:nth-child(3) {
-            animation: miniWave 0.9s ease-in-out infinite alternate 0.3s;
-        }
-        .nav-mini-bars.playing span:nth-child(4) {
-            animation: miniWave 0.6s ease-in-out infinite alternate 0.1s;
-        }
-
-        @keyframes miniWave {
-            0% { height: 3px; }
-            100% { height: 14px; }
+        .nav-popover-close:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .hobby-grid {
@@ -1588,18 +1598,31 @@
                 </ul>
 
                 <div class="nav-actions">
-                    <div class="nav-mini-player" id="nav-mini-player" title="Click to play / pause what I'm currently listening to">
-                        <button type="button" class="nav-player-btn" id="nav-player-btn" aria-label="Play or pause audio">
-                            <span id="nav-play-icon">▶</span>
+                    <div class="nav-spotify-wrapper" id="nav-spotify-wrapper">
+                        <button type="button" class="nav-mini-player" id="nav-spotify-btn" aria-label="Toggle Spotify currently listening player" aria-expanded="false" title="Click to open currently listening on Spotify">
+                            <span class="nav-spotify-icon" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1db954">
+                                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                                </svg>
+                            </span>
+                            <div class="nav-player-info">
+                                <span class="nav-player-tag">Listening</span>
+                                <span class="nav-player-title">Spotify Track 🎧</span>
+                            </div>
                         </button>
-                        <div class="nav-player-info">
-                            <span class="nav-player-tag">Listening</span>
-                            <span class="nav-player-title">Mario Groove 🎵</span>
+
+                        <div class="nav-spotify-popover" id="nav-spotify-popover" role="region" aria-label="Spotify music embed">
+                            <div class="nav-spotify-popover-header">
+                                <span>🎧 Currently Listening</span>
+                                <button type="button" class="nav-popover-close" id="nav-popover-close" aria-label="Close Spotify player">&times;</button>
+                            </div>
+                            <iframe style="border-radius: 12px; display: block;"
+                                src="https://open.spotify.com/embed/track/4B9ea9mEIpJFGu9EM9OT6r?utm_source=generator&theme=0"
+                                width="100%" height="152" frameBorder="0" allowfullscreen=""
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy" title="Spotify Track Embed">
+                            </iframe>
                         </div>
-                        <div class="nav-mini-bars" id="nav-mini-bars" aria-hidden="true">
-                            <span></span><span></span><span></span><span></span>
-                        </div>
-                        <audio id="nav-audio" src="mario_3.mp3" preload="metadata"></audio>
                     </div>
 
                     <a href="#contact" class="btn btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.88rem;"
@@ -2242,16 +2265,24 @@
                         <div style="display: flex; flex-direction: column; gap: 1rem;">
                             <div class="hobby-icon">🎧</div>
                             <div>
-                                <h3 style="font-size: 1.25rem; margin-bottom: 0.35rem; color: #ffffff;">Music &amp; Focus Sounds</h3>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.35rem; color: #ffffff;">Music &amp; Spotify Embed</h3>
                                 <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
-                                    Soundtracks and grooves that keep my workflow sharp and energized throughout the day. Check out what I'm currently listening to via the playable mini player pinned right in the fixed top navigation bar!
+                                    Soundtracks and grooves that keep my workflow sharp and focused. Here's what I'm currently listening to on Spotify:
                                 </p>
                             </div>
                         </div>
+                        <div style="border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 8px 24px rgba(0,0,0,0.5); margin: 0.5rem 0;">
+                            <iframe style="border-radius: 12px; display: block;"
+                                src="https://open.spotify.com/embed/track/4B9ea9mEIpJFGu9EM9OT6r?utm_source=generator&theme=0"
+                                width="100%" height="152" frameBorder="0" allowfullscreen=""
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy" title="Spotify Track Embed">
+                            </iframe>
+                        </div>
                         <div class="hobby-tags">
+                            <span class="hobby-pill">Spotify Embed</span>
                             <span class="hobby-pill">Focus Grooves</span>
-                            <span class="hobby-pill">Soundtracks</span>
-                            <span class="hobby-pill">Playable in Navbar ⬆</span>
+                            <span class="hobby-pill">Curated Track</span>
                         </div>
                     </div>
                 </div>
@@ -2376,31 +2407,30 @@
     </a>
     <script>
         (function() {
-            const navAudio = document.getElementById('nav-audio');
-            const navPlayerBtn = document.getElementById('nav-player-btn');
-            const navPlayIcon = document.getElementById('nav-play-icon');
-            const navMiniBars = document.getElementById('nav-mini-bars');
+            const spotifyBtn = document.getElementById('nav-spotify-btn');
+            const popover = document.getElementById('nav-spotify-popover');
+            const closeBtn = document.getElementById('nav-popover-close');
 
-            if (navPlayerBtn && navAudio) {
-                navPlayerBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (navAudio.paused) {
-                        navAudio.play().then(function() {
-                            navPlayIcon.textContent = '❚❚';
-                            if (navMiniBars) navMiniBars.classList.add('playing');
-                        }).catch(function(err) {
-                            console.log('Playback error:', err);
-                        });
-                    } else {
-                        navAudio.pause();
-                        navPlayIcon.textContent = '▶';
-                        if (navMiniBars) navMiniBars.classList.remove('playing');
-                    }
+            if (spotifyBtn && popover) {
+                spotifyBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = popover.classList.toggle('active');
+                    spotifyBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
                 });
 
-                navAudio.addEventListener('ended', function() {
-                    navPlayIcon.textContent = '▶';
-                    if (navMiniBars) navMiniBars.classList.remove('playing');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        popover.classList.remove('active');
+                        spotifyBtn.setAttribute('aria-expanded', 'false');
+                    });
+                }
+
+                document.addEventListener('click', function(e) {
+                    if (!popover.contains(e.target) && !spotifyBtn.contains(e.target)) {
+                        popover.classList.remove('active');
+                        spotifyBtn.setAttribute('aria-expanded', 'false');
+                    }
                 });
             }
         })();
